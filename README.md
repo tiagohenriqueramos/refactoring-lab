@@ -1,6 +1,6 @@
 # Refactoring Lab - Route Closure Service
 
-Este repositório é um projeto de estudo e refatoração prática. O objetivo principal é pegar um fluxo legado de encerramento de roteiros de logística, originalmente estruturado em um modelo monolítico com forte acoplamento e estruturas condicionais extensas (`switch/case`), e reestruturá-lo aplicando **Arquitetura Hexagonal (Ports and Adapters)**, **Strategy Design Pattern** e a **camada de apresentação com MVC**.
+Este repositório é um projeto de estudo e refatoração prática. O objetivo principal é pegar um fluxo de encerramento de roteiros de logística, originalmente estruturado em um modelo com forte acoplamento e estruturas condicionais extensas (`switch/case`), e reestruturá-lo aplicando **Arquitetura Hexagonal (Ports and Adapters)**, **Strategy Design Pattern** e a **camada de apresentação com MVC**.
 
 ---
 
