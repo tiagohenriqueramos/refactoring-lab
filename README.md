@@ -1,15 +1,15 @@
 # Refactoring Lab - Route Closure Service
 
-Este repositório é um projeto de estudo e refatoração prática. O objetivo principal é pegar um fluxo de encerramento de roteiros de logística, originalmente estruturado em um modelo com forte acoplamento e estruturas condicionais extensas (`switch/case`), e reestruturá-lo aplicando **Arquitetura Hexagonal (Ports and Adapters)**, **Strategy Design Pattern** e a **camada de apresentação com MVC**.
+Este repositório é um projeto de estudo focado na **construção e arquitetura de um microserviço de encerramento de roteiros de logística**. O objetivo principal é demonstrar a implementação de um fluxo complexo de domínio utilizando **Arquitetura Hexagonal (Ports and Adapters)**, o padrão de projeto **Strategy**, a camada de apresentação com **MVC** e integração com mensageria e banco NoSQL.
 
 ---
 
-## 🎯 Objetivos da Refatoração
+## 🎯 Objetivos do Projeto
 
-1. **Eliminar Condicionais Rígidas:** Substituir o acoplamento do `switch (novoStatusTratativa)` por uma arquitetura extensível via **Strategy Pattern**.
-2. **Desacoplar o Domínio da Infraestrutura:** Isolar as regras de negócio de encerramento de roteiros do framework (Spring), do banco de dados (**MongoDB**) e da mensageria (**RabbitMQ**).
-3. **Facilitar Testabilidade:** Permitir o teste unitário de cada estratégia de encerramento (Entregue, Sinistro, Reentrega, Insucesso) de forma 100% isolada e sem dependências externas.
-4. **Respeitar Princípios SOLID:** Aplicação direta do **Single Responsibility Principle (SRP)** e do **Open/Closed Principle (OCP)** — novos status de encerramento podem ser adicionados sem alterar o código do serviço principal.
+1. **Design Extensível com Strategy Pattern:** Implementar o encerramento de pedidos de forma desacoplada, permitindo que novas regras de tratativa (Sinistro, Entregue, Reentrega, Insucesso) sejam adicionadas sem alterar o fluxo principal.
+2. **Isolamento do Domínio (Clean Architecture):** Manter o núcleo das regras de negócio livre de dependências do framework (Spring), do banco de dados (**MongoDB**) e da mensageria (**RabbitMQ**).
+3. **Alta Testabilidade:** Garantir a criação de testes unitários isolados para cada estratégia de encerramento sem a necessidade de subir o contexto do Spring ou dependências de infraestrutura.
+4. **Aplicação Prática dos Princípios SOLID:** Foco em **Single Responsibility Principle (SRP)** e **Open/Closed Principle (OCP)** para garantir fácil manutenção e evolução.
 
 ---
 
@@ -17,9 +17,9 @@ Este repositório é um projeto de estudo e refatoração prática. O objetivo p
 
 - **Java 21**
 - **Spring Boot 3.x**
-    - Spring Web (MVC)
-    - Spring Data MongoDB
-    - Spring AMQP (RabbitMQ)
+  - Spring Web (MVC)
+  - Spring Data MongoDB
+  - Spring AMQP (RabbitMQ)
 - **MongoDB** (Persistência de Pedidos e Roteiros)
 - **RabbitMQ** (Publicação de eventos de atualização de roteiro e lançamentos de sinistro)
 - **JUnit 5 & Mockito** (Testes unitários e de integração)
