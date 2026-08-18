@@ -35,7 +35,7 @@ O projeto adota a **Arquitetura Hexagonal (Ports & Adapters)** integrada com **M
 src/main/java/com/refactoringlab/
 │
 ├── domain/                               <--- DOMÍNIO (Núcleo Puro, sem anotações do Spring)
-│   ├── model/                            <--- Entidades de Domínio (PedidoEntrega, Roteiro, etc.)
+│   ├── model/                            <--- Entidades de Domínio (PedidoEn, Roteiro, etc.)
 │   ├── strategy/                         <--- Padrão Strategy para tratativas do encerramento
 │   │   ├── EncerramentoPedidoStrategy.java
 │   │   └── impl/                         <--- Estratégias (Sinistro, Entregue, Reentrega, etc.)
