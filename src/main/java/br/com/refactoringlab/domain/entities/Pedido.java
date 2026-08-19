@@ -60,6 +60,19 @@ public class Pedido {
         this.dataUltimoStatus = LocalDateTime.now();
     }
 
+    public void atualizarStatus(StatusPedido novoStatus, StatusOcorrencia ocorrencia) {
+        if (this.statusPedido != null && this.statusPedido.isFinalizado()) {
+            throw new IllegalStateException("O pedido já está finalizado.");
+        }
+
+        this.statusPedido = novoStatus;
+        this.statusUltimaOcorrencia = ocorrencia;
+        this.dataUltimoStatus = LocalDateTime.now();
+
+        if (ocorrencia != null && ocorrencia.name().startsWith("INSUCESSO_")) {
+            this.quantidadeTentativasEntrega++;
+        }
+    }
     // --- Comportamentos de Negócio ---
 
     public void registrarTratativaEncerramento(StatusPedido novoStatus, StatusOcorrencia ocorrencia) {
