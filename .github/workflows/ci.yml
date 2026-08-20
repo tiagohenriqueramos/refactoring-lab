@@ -27,11 +27,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Fixa o Gradle na versão 8.11.1 para evitar breaking changes do Gradle 9.x com o Sonar
-      - name: Setup Gradle 8.11.1
-        uses: gradle/actions/setup-gradle@v3
+      # Força o Gradle na versão 8.12 para evitar que o runner use a versão 9.x
+      - name: Setup Gradle 8.12
+        uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.11.1'
+          gradle-version: '8.12'
 
       - name: Run Tests and Jacoco Report
         run: ./gradlew test jacocoTestReport
