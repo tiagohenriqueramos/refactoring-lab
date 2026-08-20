@@ -6,36 +6,6 @@ plugins {
     id 'org.sonarqube' version '7.4.0.8496'
 }
 
-testing {
-    suites {
-        test {
-            useJUnitJupiter()
-        }
-    }
-}
-
-test {
-    finalizedBy jacocoTestReport // Garante que o relatório do JaCoCo é gerado logo após os testes
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true // O Sonar precisa do XML habilitado
-        html.required = true
-    }
-}
-
-sonar {
-    properties {
-        property "sonar.projectKey", "tiagohenriqueramos_refactoring-lab"
-        property "sonar.organization", "tiagohenriqueramos"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
-        property "sonar.gradle.skipCompile", "true"
-    }
-}
-
 group = 'br.com.refactoring-lab'
 version = '0.0.1-SNAPSHOT'
 description = 'refactoring-lab'
@@ -67,6 +37,53 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+testing {
+    suites {
+        test {
+            useJUnitJupiter()
+        }
+    }
+}
+
+// Configuração de execução e validação dos testes
+test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+// Geração de relatórios de cobertura
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    finalizedBy jacocoTestCoverageVerification
+}
+
+// Regra para exigir % mínima de cobertura local/build
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
+    violationRules {
+        rule {
+            element = 'BUNDLE'
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.80 // Exige 80% de cobertura de linhas
+            }
+        }
+    }
+}
+
+// Envio dos dados para o SonarCloud
+sonar {
+    properties {
+        property "sonar.projectKey", "tiagohenriqueramos_refactoring-lab"
+        property "sonar.organization", "tiagohenriqueramos"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.gradle.skipCompile", "true"
+        property "sonar.qualitygate.wait", "true" // Trava a pipeline no GitHub caso o Sonar reprove o Quality Gate
+    }
 }
