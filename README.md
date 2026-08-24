@@ -17,9 +17,9 @@ Este repositório é um projeto de estudo focado na **construção e arquitetura
 
 - **Java 21**
 - **Spring Boot 3.x**
-  - Spring Web (MVC)
-  - Spring Data MongoDB
-  - Spring AMQP (RabbitMQ)
+    - Spring Web (MVC)
+    - Spring Data MongoDB
+    - Spring AMQP (RabbitMQ)
 - **MongoDB** (Persistência de Pedidos e Roteiros)
 - **RabbitMQ** (Publicação de eventos de atualização de roteiro e lançamentos de sinistro)
 - **JUnit 5 & Mockito** (Testes unitários e de integração)

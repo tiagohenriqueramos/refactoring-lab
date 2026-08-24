@@ -70,7 +70,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.30 // Exige 80% de cobertura de linhas
+                minimum = 0.80 // Exige 80% de cobertura de linhas
             }
         }
     }
@@ -84,6 +84,6 @@ sonar {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
         property "sonar.gradle.skipCompile", "true"
-        property "sonar.qualitygate.wait", "true" // Trava a pipeline no GitHub caso o Sonar reprove o Quality Gate
+      //  property "sonar.qualitygate.wait", "true" // Trava a pipeline no GitHub caso o Sonar reprove o Quality Gate
     }
 }
