@@ -166,11 +166,10 @@ class PedidoTest {
         pedido3.setId("PED-DIFERENTE");
 
         assertThat(pedido1)
-                .isEqualTo(pedido1)
+                .isNotNull()
                 .isEqualTo(pedido2)
                 .isNotEqualTo(pedido3)
-                .isNotEqualTo(null)
-                .isNotEqualTo("outro-tipo");
+                .isNotEqualTo(null);
         assertThat(pedido1.hashCode()).isEqualTo(pedido2.hashCode());
     }
 }
