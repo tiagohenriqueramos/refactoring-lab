@@ -1,8 +1,6 @@
 name: CI Pipeline - Domain & Tests
 
 on:
-  push:
-    branches: [ "main", "develop", "feature/*" ]
   pull_request:
     types: [opened, synchronize, reopened]
 
