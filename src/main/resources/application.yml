@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: refactoring-lab
+
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/refactoring_db}
+
+server:
+  port: 8080
