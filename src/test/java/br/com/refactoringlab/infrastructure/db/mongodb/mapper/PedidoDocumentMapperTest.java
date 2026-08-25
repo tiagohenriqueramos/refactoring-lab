@@ -149,5 +149,67 @@ class PedidoDocumentMapperTest {
         assertThat(pedido.getDataUltimoStatus()).isEqualTo(dataUltimoStatus);
         assertThat(pedido.getQuantidadeTentativasEntrega()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("Deve manter consistencia no round-trip dominio documento dominio")
+    void deveManterConsistenciaNoRoundTrip() {
+        var endereco = new Endereco("Rua C", "30", "Bloco 1", "Bairro C", "Curitiba", "PR", "80000-000");
+        var dataCriacao = LocalDateTime.of(2026, 8, 25, 8, 0);
+        var dataPrometida = LocalDateTime.of(2026, 8, 29, 18, 0);
+        var dataUltimoStatus = LocalDateTime.of(2026, 8, 26, 12, 15);
+
+        var original = new Pedido();
+        original.setId("PED-ROUND");
+        original.setCodigoInterno(3003L);
+        original.setClienteGuid("GUID-ROUND");
+        original.setClienteNome("Cliente Round");
+        original.setCodigoRoteiro("ROT-ROUND");
+        original.setCodigoRastreio("RAST-ROUND");
+        original.setNumeroNotaFiscal("NF-ROUND");
+        original.setChaveNfe("CHAVE-ROUND");
+        original.setStatusPedido(StatusPedido.EM_RETORNO);
+        original.setStatusUltimaOcorrencia(StatusOcorrencia.DEVOLUCAO);
+        original.setNomeDestinatario("Destinatario Round");
+        original.setCpfCnpjDestinatario("33333333333");
+        original.setEnderecoDestinatario(endereco);
+        original.setNomeRemetente("Remetente Round");
+        original.setCpfCnpjRemetente("44444444444");
+        original.setEnderecoRemetente(endereco);
+        original.setCodigoCentroDistribuicao("CD-ROUND");
+        original.setNomeCentroDistribuicao("Centro Round");
+        original.setEnderecoCentroDistribuicao(endereco);
+        original.setDataCriacao(dataCriacao);
+        original.setDataPrometidaEntrega(dataPrometida);
+        original.setDataUltimoStatus(dataUltimoStatus);
+        original.setQuantidadeTentativasEntrega(3);
+
+        var documento = mapper.toDocument(original);
+        var convertido = mapper.toDomain(documento);
+
+        assertThat(convertido).isNotNull();
+        assertThat(convertido.getId()).isEqualTo(original.getId());
+        assertThat(convertido.getCodigoInterno()).isEqualTo(original.getCodigoInterno());
+        assertThat(convertido.getClienteGuid()).isEqualTo(original.getClienteGuid());
+        assertThat(convertido.getClienteNome()).isEqualTo(original.getClienteNome());
+        assertThat(convertido.getCodigoRoteiro()).isEqualTo(original.getCodigoRoteiro());
+        assertThat(convertido.getCodigoRastreio()).isEqualTo(original.getCodigoRastreio());
+        assertThat(convertido.getNumeroNotaFiscal()).isEqualTo(original.getNumeroNotaFiscal());
+        assertThat(convertido.getChaveNfe()).isEqualTo(original.getChaveNfe());
+        assertThat(convertido.getStatusPedido()).isEqualTo(original.getStatusPedido());
+        assertThat(convertido.getStatusUltimaOcorrencia()).isEqualTo(original.getStatusUltimaOcorrencia());
+        assertThat(convertido.getNomeDestinatario()).isEqualTo(original.getNomeDestinatario());
+        assertThat(convertido.getCpfCnpjDestinatario()).isEqualTo(original.getCpfCnpjDestinatario());
+        assertThat(convertido.getEnderecoDestinatario()).isEqualTo(original.getEnderecoDestinatario());
+        assertThat(convertido.getNomeRemetente()).isEqualTo(original.getNomeRemetente());
+        assertThat(convertido.getCpfCnpjRemetente()).isEqualTo(original.getCpfCnpjRemetente());
+        assertThat(convertido.getEnderecoRemetente()).isEqualTo(original.getEnderecoRemetente());
+        assertThat(convertido.getCodigoCentroDistribuicao()).isEqualTo(original.getCodigoCentroDistribuicao());
+        assertThat(convertido.getNomeCentroDistribuicao()).isEqualTo(original.getNomeCentroDistribuicao());
+        assertThat(convertido.getEnderecoCentroDistribuicao()).isEqualTo(original.getEnderecoCentroDistribuicao());
+        assertThat(convertido.getDataCriacao()).isEqualTo(original.getDataCriacao());
+        assertThat(convertido.getDataPrometidaEntrega()).isEqualTo(original.getDataPrometidaEntrega());
+        assertThat(convertido.getDataUltimoStatus()).isEqualTo(original.getDataUltimoStatus());
+        assertThat(convertido.getQuantidadeTentativasEntrega()).isEqualTo(original.getQuantidadeTentativasEntrega());
+    }
 }
 
