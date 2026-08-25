@@ -36,9 +36,9 @@ public class Pedido {
     private Endereco enderecoRemetente;
 
     // --- Centro de Distribuição (Hub para devolução/retorno) ---
-    private String codigoCentroDistribuição;
-    private String nomeCentroDistribuição;
-    private Endereco enderecoCentroDistribuição;
+    private String codigoCentroDistribuicao;
+    private String nomeCentroDistribuicao;
+    private Endereco enderecoCentroDistribuicao;
 
     // --- Datas e Controle Operacional ---
     private LocalDateTime dataCriacao;
@@ -212,28 +212,28 @@ public class Pedido {
         this.enderecoRemetente = enderecoRemetente;
     }
 
-    public String getCodigoCentroDistribuição() {
-        return codigoCentroDistribuição;
+    public String getCodigoCentroDistribuicao() {
+        return codigoCentroDistribuicao;
     }
 
-    public void setCodigoCentroDistribuição(String codigoCentroDistribuição) {
-        this.codigoCentroDistribuição = codigoCentroDistribuição;
+    public void setCodigoCentroDistribuicao(String codigoCentroDistribuicao) {
+        this.codigoCentroDistribuicao = codigoCentroDistribuicao;
     }
 
-    public String getNomeCentroDistribuição() {
-        return nomeCentroDistribuição;
+    public String getNomeCentroDistribuicao() {
+        return nomeCentroDistribuicao;
     }
 
-    public void setNomeCentroDistribuição(String nomeCentroDistribuição) {
-        this.nomeCentroDistribuição = nomeCentroDistribuição;
+    public void setNomeCentroDistribuicao(String nomeCentroDistribuicao) {
+        this.nomeCentroDistribuicao = nomeCentroDistribuicao;
     }
 
-    public Endereco getEnderecoCentroDistribuição() {
-        return enderecoCentroDistribuição;
+    public Endereco getEnderecoCentroDistribuicao() {
+        return enderecoCentroDistribuicao;
     }
 
-    public void setEnderecoCentroDistribuição(Endereco enderecoCentroDistribuição) {
-        this.enderecoCentroDistribuição = enderecoCentroDistribuição;
+    public void setEnderecoCentroDistribuicao(Endereco enderecoCentroDistribuicao) {
+        this.enderecoCentroDistribuicao = enderecoCentroDistribuicao;
     }
 
     public LocalDateTime getDataCriacao() {
