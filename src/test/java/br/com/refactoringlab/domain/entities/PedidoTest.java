@@ -172,4 +172,13 @@ class PedidoTest {
                 .isNotEqualTo(null);
         assertThat(pedido1.hashCode()).isEqualTo(pedido2.hashCode());
     }
+
+    @Test
+    @DisplayName("Deve retornar falso ao comparar pedido com tipo diferente")
+    void deveRetornarFalsoAoCompararComTipoDiferente() {
+        var pedido = new Pedido();
+        pedido.setId("PED-1");
+
+        assertThat(pedido.equals("PED-1")).isFalse();
+    }
 }
