@@ -1,6 +1,6 @@
 # Refactoring Lab - Route Closure Service
 
-Este repositório é um projeto de estudo focado na **construção e arquitetura de um microserviço de encerramento de roteiros de logística**. O objetivo principal é demonstrar a implementação de um fluxo complexo de domínio utilizando **Arquitetura Hexagonal (Ports and Adapters)**, o padrão de projeto **Strategy**, a camada de apresentação com **MVC** e integração com mensageria e banco NoSQL.
+Este repositório é um projeto de estudo focado na **construção e arquitetura de um microserviço de encerramento de roteiros de logística**. O objetivo principal é demonstrar a implementação de um fluxo de domínio com **Clean Architecture**, mantendo regras de negócio isoladas e a infraestrutura como detalhe de implementação.
 
 ---
 
@@ -29,29 +29,23 @@ Este repositório é um projeto de estudo focado na **construção e arquitetura
 
 ## 📐 Arquitetura do Projeto
 
-O projeto adota a **Arquitetura Hexagonal (Ports & Adapters)** integrada com **MVC** na camada de entrada HTTP:
+O projeto adota **Clean Architecture** com separação de responsabilidades entre domínio, aplicação e infraestrutura:
 
 ```text
-src/main/java/com/refactoringlab/
+src/main/java/br/com/refactoringlab/
 │
-├── domain/                               <--- DOMÍNIO (Núcleo Puro, sem anotações do Spring)
-│   ├── model/                            <--- Entidades de Domínio (PedidoEn, Roteiro, etc.)
-│   ├── strategy/                         <--- Padrão Strategy para tratativas do encerramento
-│   │   ├── EncerramentoPedidoStrategy.java
-│   │   └── impl/                         <--- Estratégias (Sinistro, Entregue, Reentrega, etc.)
-│   ├── usecase/                          <--- Caso de Uso Principal (EncerrarRoteiroUseCase)
-│   └── ports/                            <--- Contratos (Interfaces)
-│       ├── input/                        <--- Porta do Caso de Uso
-│       └── output/                       <--- Interfaces para Mongo, RabbitMQ e Rastreio
+├── domain/                               <--- Regras de negócio puras
+│   ├── entities/                         <--- Entidades (ex.: Pedido)
+│   ├── valueobjects/                     <--- Objetos de valor (ex.: Endereco)
+│   ├── enums/                            <--- Enumerações de negócio
 │
-└── infrastructure/                       <--- INFRAESTRUTURA (Adapters & Frameworks)
-    ├── adapters/
-    │   ├── input/
-    │   │   └── rest/                     <--- CAMADA MVC (REST Controller e DTOs)
-    │   │       ├── EncerramentoRoteiroController.java
-    │   │       └── dto/
-    │   │
-    │   └── output/                       <--- Adapters Concretos
-    │       ├── mongodb/                  <--- Repositórios e Persistência
-    │       └── rabbitmq/                 <--- Produtores de Mensagens
-    └── config/                           <--- Configurações de Beans e Contexto Spring
+├── application/                          <--- Casos de uso e orquestração
+│   ├── usecases/                         <--- Regras de aplicação
+│   ├── dto/                              <--- DTOs de entrada da aplicação
+│   └── gateways/                         <--- Contratos para serviços externos
+│
+└── infrastructure/                       <--- Frameworks e detalhes externos
+    ├── controllers/                      <--- Camada HTTP (Spring MVC + DTOs)
+    ├── db/mongodb/repository/            <--- Repositórios Spring Data
+    ├── db/mongodb/gateway/               <--- Implementações concretas dos gateways
+    └── config/                           <--- Wiring de beans Spring

@@ -1,9 +1,9 @@
 package br.com.refactoringlab.infrastructure.controllers;
 
+import br.com.refactoringlab.application.usecases.BuscarPedidoPorIdUseCase;
 import br.com.refactoringlab.application.usecases.CriarPedidoUseCase;
 import br.com.refactoringlab.domain.entities.Pedido;
 import br.com.refactoringlab.domain.enums.StatusPedido;
-import br.com.refactoringlab.domain.ports.PedidoRepositoryPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ class PedidoControllerTest {
     private CriarPedidoUseCase criarPedidoUseCase;
 
     @MockitoBean
-    private PedidoRepositoryPort pedidoRepositoryPort;
+    private BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase;
 
     @Test
     @DisplayName("Deve criar pedido e retornar 201")
@@ -108,7 +108,7 @@ class PedidoControllerTest {
         pedido.setId("PED-200");
         pedido.setCodigoInterno(200L);
 
-        when(pedidoRepositoryPort.buscarPorId("PED-200")).thenReturn(Optional.of(pedido));
+        when(buscarPedidoPorIdUseCase.executar("PED-200")).thenReturn(Optional.of(pedido));
 
         mockMvc.perform(get("/v1/pedidos/PED-200"))
                 .andExpect(status().isOk())
@@ -119,7 +119,7 @@ class PedidoControllerTest {
     @Test
     @DisplayName("Deve retornar 404 ao buscar pedido inexistente")
     void deveRetornar404AoBuscarPedidoInexistente() throws Exception {
-        when(pedidoRepositoryPort.buscarPorId("PED-404")).thenReturn(Optional.empty());
+        when(buscarPedidoPorIdUseCase.executar("PED-404")).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/v1/pedidos/PED-404"))
                 .andExpect(status().isNotFound());

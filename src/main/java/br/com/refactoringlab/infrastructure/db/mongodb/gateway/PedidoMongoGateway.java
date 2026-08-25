@@ -1,21 +1,21 @@
-package br.com.refactoringlab.infrastructure.db.mongodb.adapter;
+package br.com.refactoringlab.infrastructure.db.mongodb.gateway;
 
+import br.com.refactoringlab.application.gateways.PedidoGateway;
 import br.com.refactoringlab.domain.entities.Pedido;
-import br.com.refactoringlab.domain.ports.PedidoRepositoryPort;
-import br.com.refactoringlab.infrastructure.db.mongodb.mapper.PedidoDocumentMapper;
 import br.com.refactoringlab.infrastructure.db.mongodb.document.PedidoDocument;
-import br.com.refactoringlab.infrastructure.db.mongodb.repository.MongoPedidoRepository;
+import br.com.refactoringlab.infrastructure.db.mongodb.mapper.PedidoDocumentMapper;
+import br.com.refactoringlab.infrastructure.db.mongodb.repository.MongoPedidoSpringRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class PedidoRepositoryAdapter implements PedidoRepositoryPort {
+public class PedidoMongoGateway implements PedidoGateway {
 
-    private final MongoPedidoRepository mongoRepository;
+    private final MongoPedidoSpringRepository mongoRepository;
     private final PedidoDocumentMapper mapper;
 
-    public PedidoRepositoryAdapter(MongoPedidoRepository mongoRepository, PedidoDocumentMapper mapper) {
+    public PedidoMongoGateway(MongoPedidoSpringRepository mongoRepository, PedidoDocumentMapper mapper) {
         this.mongoRepository = mongoRepository;
         this.mapper = mapper;
     }
@@ -33,3 +33,6 @@ public class PedidoRepositoryAdapter implements PedidoRepositoryPort {
                 .map(mapper::toDomain);
     }
 }
+
+
+
