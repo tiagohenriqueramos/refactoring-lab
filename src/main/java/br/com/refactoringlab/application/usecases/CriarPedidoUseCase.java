@@ -1,19 +1,17 @@
 package br.com.refactoringlab.application.usecases;
 
 import br.com.refactoringlab.application.dto.CriarPedidoInput;
+import br.com.refactoringlab.application.gateways.PedidoGateway;
 import br.com.refactoringlab.domain.entities.Pedido;
-import br.com.refactoringlab.domain.ports.PedidoRepositoryPort;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Service
 public class CriarPedidoUseCase {
 
-    private final PedidoRepositoryPort pedidoRepositoryPort;
+    private final PedidoGateway pedidoGateway;
 
-    public CriarPedidoUseCase(PedidoRepositoryPort pedidoRepositoryPort) {
-        this.pedidoRepositoryPort = pedidoRepositoryPort;
+    public CriarPedidoUseCase(PedidoGateway pedidoGateway) {
+        this.pedidoGateway = pedidoGateway;
     }
 
     public Pedido executar(CriarPedidoInput input) {
@@ -43,7 +41,7 @@ public class CriarPedidoUseCase {
         pedido.setDataUltimoStatus(LocalDateTime.now());
         pedido.setQuantidadeTentativasEntrega(0);
 
-        return pedidoRepositoryPort.salvar(pedido);
+        return pedidoGateway.salvar(pedido);
     }
 }
 

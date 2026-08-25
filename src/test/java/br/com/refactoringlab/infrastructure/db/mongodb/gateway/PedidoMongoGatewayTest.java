@@ -1,9 +1,9 @@
-package br.com.refactoringlab.infrastructure.db.mongodb.adapter;
+package br.com.refactoringlab.infrastructure.db.mongodb.gateway;
 
 import br.com.refactoringlab.domain.entities.Pedido;
 import br.com.refactoringlab.infrastructure.db.mongodb.document.PedidoDocument;
 import br.com.refactoringlab.infrastructure.db.mongodb.mapper.PedidoDocumentMapper;
-import br.com.refactoringlab.infrastructure.db.mongodb.repository.MongoPedidoRepository;
+import br.com.refactoringlab.infrastructure.db.mongodb.repository.MongoPedidoSpringRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,19 +19,19 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PedidoRepositoryAdapterTest {
+class PedidoMongoGatewayTest {
 
     @Mock
-    private MongoPedidoRepository mongoRepository;
+    private MongoPedidoSpringRepository mongoRepository;
 
     @Mock
     private PedidoDocumentMapper mapper;
 
     @InjectMocks
-    private PedidoRepositoryAdapter adapter;
+    private PedidoMongoGateway repository;
 
     @Test
-    @DisplayName("Deve salvar pedido usando mapper e repositório")
+    @DisplayName("Deve salvar pedido usando mapper e repositorio")
     void deveSalvarPedidoUsandoMapperERepositorio() {
         var pedidoEntrada = new Pedido();
         pedidoEntrada.setId("PED-1");
@@ -49,7 +49,7 @@ class PedidoRepositoryAdapterTest {
         when(mongoRepository.save(document)).thenReturn(documentSalvo);
         when(mapper.toDomain(documentSalvo)).thenReturn(pedidoRetorno);
 
-        var resultado = adapter.salvar(pedidoEntrada);
+        var resultado = repository.salvar(pedidoEntrada);
 
         assertThat(resultado).isSameAs(pedidoRetorno);
         verify(mapper).toDocument(pedidoEntrada);
@@ -70,7 +70,7 @@ class PedidoRepositoryAdapterTest {
         when(mongoRepository.findById(id)).thenReturn(Optional.of(document));
         when(mapper.toDomain(document)).thenReturn(pedido);
 
-        var resultado = adapter.buscarPorId(id);
+        var resultado = repository.buscarPorId(id);
 
         assertThat(resultado).contains(pedido);
         verify(mongoRepository).findById(id);
@@ -83,11 +83,13 @@ class PedidoRepositoryAdapterTest {
         var id = "PED-404";
         when(mongoRepository.findById(id)).thenReturn(Optional.empty());
 
-        var resultado = adapter.buscarPorId(id);
+        var resultado = repository.buscarPorId(id);
 
         assertThat(resultado).isEmpty();
         verify(mongoRepository).findById(id);
         verifyNoInteractions(mapper);
     }
 }
+
+
 

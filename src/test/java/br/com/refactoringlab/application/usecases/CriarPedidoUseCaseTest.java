@@ -1,10 +1,10 @@
 package br.com.refactoringlab.application.usecases;
 
 import br.com.refactoringlab.application.dto.CriarPedidoInput;
+import br.com.refactoringlab.application.gateways.PedidoGateway;
 import br.com.refactoringlab.domain.entities.Pedido;
 import br.com.refactoringlab.domain.enums.StatusOcorrencia;
 import br.com.refactoringlab.domain.enums.StatusPedido;
-import br.com.refactoringlab.domain.ports.PedidoRepositoryPort;
 import br.com.refactoringlab.domain.valueobjects.Endereco;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class CriarPedidoUseCaseTest {
 
     @Mock
-    private PedidoRepositoryPort pedidoRepositoryPort;
+    private PedidoGateway pedidoGateway;
 
     @InjectMocks
     private CriarPedidoUseCase useCase;
@@ -60,14 +60,14 @@ class CriarPedidoUseCaseTest {
 
         var pedidoSalvo = new Pedido();
         pedidoSalvo.setId("PED-1");
-        when(pedidoRepositoryPort.salvar(any(Pedido.class))).thenReturn(pedidoSalvo);
+        when(pedidoGateway.salvar(any(Pedido.class))).thenReturn(pedidoSalvo);
 
         var resultado = useCase.executar(input);
 
         assertThat(resultado).isSameAs(pedidoSalvo);
 
         var pedidoCaptor = ArgumentCaptor.forClass(Pedido.class);
-        verify(pedidoRepositoryPort).salvar(pedidoCaptor.capture());
+        verify(pedidoGateway).salvar(pedidoCaptor.capture());
         var pedidoCapturado = pedidoCaptor.getValue();
 
         assertThat(pedidoCapturado.getCodigoInterno()).isEqualTo(999L);
