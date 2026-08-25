@@ -1,16 +1,19 @@
-package br.com.refactoringlab.domain.entities;
+package br.com.refactoringlab.infrastructure.db.mongodb.document;
 
-import br.com.refactoringlab.domain.valueobjects.Endereco;
 import br.com.refactoringlab.domain.enums.StatusOcorrencia;
 import br.com.refactoringlab.domain.enums.StatusPedido;
+import br.com.refactoringlab.domain.valueobjects.Endereco;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-public class Pedido {
+@Document(collection = "pedidos")
+public class PedidoDocument {
 
-    // --- Identificadores Principais ---
+    @Id
     private String id;
+
     private Long codigoInterno;
     private String clienteGuid;
     private String clienteNome;
@@ -45,44 +48,6 @@ public class Pedido {
     private LocalDateTime dataPrometidaEntrega;
     private LocalDateTime dataUltimoStatus;
     private Integer quantidadeTentativasEntrega;
-
-    public Pedido() {
-        this.dataCriacao = LocalDateTime.now();
-        this.quantidadeTentativasEntrega = 0;
-    }
-
-    public Pedido(String id, Long codigoInterno, String clienteGuid, StatusPedido statusPedido) {
-        this();
-        this.id = id;
-        this.codigoInterno = codigoInterno;
-        this.clienteGuid = clienteGuid;
-        this.statusPedido = statusPedido;
-        this.dataUltimoStatus = LocalDateTime.now();
-    }
-
-    public void atualizarStatus(StatusPedido novoStatus, StatusOcorrencia ocorrencia) {
-        if (this.statusPedido != null && this.statusPedido.isFinalizado()) {
-            throw new IllegalStateException("O pedido já está finalizado.");
-        }
-
-        this.statusPedido = novoStatus;
-        this.statusUltimaOcorrencia = ocorrencia;
-        this.dataUltimoStatus = LocalDateTime.now();
-
-        if (ocorrencia != null && ocorrencia.name().startsWith("INSUCESSO_")) {
-            this.quantidadeTentativasEntrega++;
-        }
-    }
-    // --- Comportamentos de Negócio ---
-
-    public void registrarTratativaEncerramento(StatusPedido novoStatus, StatusOcorrencia ocorrencia) {
-        this.statusPedido = novoStatus;
-        this.statusUltimaOcorrencia = ocorrencia;
-        this.dataUltimoStatus = LocalDateTime.now();
-        this.quantidadeTentativasEntrega++;
-    }
-
-    // --- Getters e Setters ---
 
     public String getId() {
         return id;
@@ -266,18 +231,5 @@ public class Pedido {
 
     public void setQuantidadeTentativasEntrega(Integer quantidadeTentativasEntrega) {
         this.quantidadeTentativasEntrega = quantidadeTentativasEntrega;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pedido pedido = (Pedido) o;
-        return Objects.equals(id, pedido.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

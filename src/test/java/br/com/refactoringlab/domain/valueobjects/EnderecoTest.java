@@ -41,5 +41,14 @@ class EnderecoTest {
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("O estado (UF) é obrigatório");
     }
+
+    @Test
+    @DisplayName("Deve formatar endereço quando complemento for nulo")
+    void deveFormatarEnderecoComComplementoNulo() {
+        var endereco = new Endereco("Rua das Flores", "123", null, "Centro", "Sao Paulo", "SP", "01000-000");
+
+        assertThat(endereco.enderecoFormatado())
+                .isEqualTo("Rua das Flores, 123, Centro - Sao Paulo/SP, CEP: 01000-000");
+    }
 }
 

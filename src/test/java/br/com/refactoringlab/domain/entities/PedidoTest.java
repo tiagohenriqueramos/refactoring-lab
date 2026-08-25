@@ -122,9 +122,9 @@ class PedidoTest {
         pedido.setNomeRemetente("Remetente");
         pedido.setCpfCnpjRemetente("00987654321");
         pedido.setEnderecoRemetente(endereco);
-        pedido.setCodigoCentroDistribuição("CD-01");
-        pedido.setNomeCentroDistribuição("Centro Oeste");
-        pedido.setEnderecoCentroDistribuição(endereco);
+        pedido.setCodigoCentroDistribuicao("CD-01");
+        pedido.setNomeCentroDistribuicao("Centro Oeste");
+        pedido.setEnderecoCentroDistribuicao(endereco);
         pedido.setDataCriacao(dataCriacao);
         pedido.setDataPrometidaEntrega(dataPrometida);
         pedido.setDataUltimoStatus(dataStatus);
@@ -146,9 +146,9 @@ class PedidoTest {
         assertThat(pedido.getNomeRemetente()).isEqualTo("Remetente");
         assertThat(pedido.getCpfCnpjRemetente()).isEqualTo("00987654321");
         assertThat(pedido.getEnderecoRemetente()).isEqualTo(endereco);
-        assertThat(pedido.getCodigoCentroDistribuição()).isEqualTo("CD-01");
-        assertThat(pedido.getNomeCentroDistribuição()).isEqualTo("Centro Oeste");
-        assertThat(pedido.getEnderecoCentroDistribuição()).isEqualTo(endereco);
+        assertThat(pedido.getCodigoCentroDistribuicao()).isEqualTo("CD-01");
+        assertThat(pedido.getNomeCentroDistribuicao()).isEqualTo("Centro Oeste");
+        assertThat(pedido.getEnderecoCentroDistribuicao()).isEqualTo(endereco);
         assertThat(pedido.getDataCriacao()).isEqualTo(dataCriacao);
         assertThat(pedido.getDataPrometidaEntrega()).isEqualTo(dataPrometida);
         assertThat(pedido.getDataUltimoStatus()).isEqualTo(dataStatus);
@@ -171,5 +171,14 @@ class PedidoTest {
                 .isNotEqualTo(pedido3)
                 .isNotEqualTo(null);
         assertThat(pedido1.hashCode()).isEqualTo(pedido2.hashCode());
+    }
+
+    @Test
+    @DisplayName("Deve retornar falso ao comparar pedido com tipo diferente")
+    void deveRetornarFalsoAoCompararComTipoDiferente() {
+        var pedido = new Pedido();
+        pedido.setId("PED-1");
+
+        assertThat(pedido.equals("PED-1")).isFalse();
     }
 }
