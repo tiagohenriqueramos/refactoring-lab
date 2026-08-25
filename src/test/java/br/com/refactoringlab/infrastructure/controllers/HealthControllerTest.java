@@ -26,7 +26,7 @@ class HealthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value("UP"))
-                .andExpect(jsonPath("$.message").value("Aplicação rodando com sucesso no Azure!"));
+                .andExpect(jsonPath("$.message").value("Aplicação rodando com sucesso no Azure! Por Tiago Ramos"));
     }
 
     @Test
