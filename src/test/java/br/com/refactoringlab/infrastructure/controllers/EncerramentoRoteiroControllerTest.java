@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -88,6 +89,49 @@ class EncerramentoRoteiroControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 quando usuarioId nao for informado")
+    void deveRetornar400QuandoUsuarioIdNaoForInformado() throws Exception {
+        var payload = """
+                [
+                  {
+                    "pedidoEntregaId": "PED-3",
+                    "novoStatus": "ENTREGUE",
+                    "motivoInsucesso": null
+                  }
+                ]
+                """;
+
+        mockMvc.perform(post("/encerramento-roteiro/ROT-3")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isBadRequest());
+
+        verify(encerrarRoteiroUseCase, never()).executar(any());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 quando novoStatus for invalido")
+    void deveRetornar400QuandoNovoStatusForInvalido() throws Exception {
+        var payload = """
+                [
+                  {
+                    "pedidoEntregaId": "PED-4",
+                    "novoStatus": "STATUS_INVALIDO",
+                    "motivoInsucesso": null
+                  }
+                ]
+                """;
+
+        mockMvc.perform(post("/encerramento-roteiro/ROT-4")
+                        .queryParam("usuarioId", "USR-4")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isBadRequest());
+
+        verify(encerrarRoteiroUseCase, never()).executar(any());
     }
 }
 
