@@ -7,6 +7,7 @@ import br.com.refactoringlab.infrastructure.db.mongodb.mapper.PedidoDocumentMapp
 import br.com.refactoringlab.infrastructure.db.mongodb.repository.MongoPedidoSpringRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -31,6 +32,14 @@ public class PedidoMongoGateway implements PedidoGateway {
     public Optional<Pedido> buscarPorId(String id) {
         return mongoRepository.findById(id)
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Pedido> buscarPorIds(List<String> ids) {
+        List<PedidoDocument> documents = mongoRepository.findAllById(ids);
+        return documents.stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }
 
