@@ -1,10 +1,9 @@
 package br.com.refactoringlab.infrastructure.controllers;
 
-import br.com.refactoringlab.application.dto.EncerrarPedidoItemInput;
-import br.com.refactoringlab.application.dto.EncerrarRoteiroInput;
-import br.com.refactoringlab.application.dto.EncerramentoPedidoOutput;
 import br.com.refactoringlab.application.usecases.EncerrarRoteiroUseCase;
 import br.com.refactoringlab.infrastructure.controllers.dto.EncerrarPedidoRoteiroRequest;
+import br.com.refactoringlab.infrastructure.controllers.dto.EncerramentoPedidoRoteiroResponse;
+import br.com.refactoringlab.infrastructure.controllers.mapper.EncerramentoRoteiroControllerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -24,22 +23,14 @@ public class EncerramentoRoteiroController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<List<EncerramentoPedidoOutput>> encerrarPedidosRoteiro(
+    public ResponseEntity<List<EncerramentoPedidoRoteiroResponse>> encerrarPedidosRoteiro(
             @PathVariable String id,
             @RequestParam String usuarioId,
             @RequestBody List<EncerrarPedidoRoteiroRequest> request) {
         try {
-            List<EncerrarPedidoItemInput> itens = request.stream()
-                    .map(item -> new EncerrarPedidoItemInput(
-                            item.pedidoEntregaId(),
-                            item.novoStatus(),
-                            item.motivoInsucesso()
-                    ))
-                    .toList();
-
-            EncerrarRoteiroInput input = new EncerrarRoteiroInput(id, usuarioId, itens);
-
-            List<EncerramentoPedidoOutput> response = encerrarRoteiroUseCase.executar(input);
+            var input = EncerramentoRoteiroControllerMapper.toUseCaseInput(id, usuarioId, request);
+            var output = encerrarRoteiroUseCase.executar(input);
+            List<EncerramentoPedidoRoteiroResponse> response = EncerramentoRoteiroControllerMapper.toResponseList(output);
             return ResponseEntity.ok(response);
         } catch (Exception ex) {
             logger.error("Erro ao encerrar pedidos do roteiro {}: {}", id, ex.getMessage(), ex);
