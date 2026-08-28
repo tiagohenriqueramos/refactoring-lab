@@ -38,6 +38,7 @@ public class Pedido {
     // --- Centro de Distribuição (Hub para devolução/retorno) ---
     private String codigoCentroDistribuicao;
     private String nomeCentroDistribuicao;
+    private boolean isDevolucao;
     private Endereco enderecoCentroDistribuicao;
 
     // --- Datas e Controle Operacional ---
@@ -178,6 +179,14 @@ public class Pedido {
 
     public void setCpfCnpjDestinatario(String cpfCnpjDestinatario) {
         this.cpfCnpjDestinatario = cpfCnpjDestinatario;
+    }
+
+    public boolean getIsDevolucao() {
+        return isDevolucao;
+    }
+
+    public void setIsDevolucao(boolean isDevolucao) {
+        this.isDevolucao = isDevolucao;
     }
 
     public Endereco getEnderecoDestinatario() {
