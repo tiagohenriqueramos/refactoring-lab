@@ -61,8 +61,8 @@ public class EncerrarRoteiroUseCase {
                         pedido,
                         input.roteiroId(),
                         item.novoStatusOcorrencia(),
-                        input.usuarioId(),
-                        item.motivoInsucesso()
+                        item.motivoInsucesso(),
+                        input.usuarioId()
                 );
 
                 resultados.add(resultado);
