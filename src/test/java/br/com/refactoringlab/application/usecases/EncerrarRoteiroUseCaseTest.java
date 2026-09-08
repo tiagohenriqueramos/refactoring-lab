@@ -4,7 +4,6 @@ import br.com.refactoringlab.application.dto.AlterarPedidosRoteiroInput;
 import br.com.refactoringlab.application.dto.EncerramentoPedidoOutput;
 import br.com.refactoringlab.application.dto.EncerrarPedidoItemInput;
 import br.com.refactoringlab.application.dto.EncerrarRoteiroInput;
-import br.com.refactoringlab.application.gateways.EncerrarRoteiroGateway;
 import br.com.refactoringlab.application.gateways.PedidoGateway;
 import br.com.refactoringlab.application.gateways.RastreioInternoGateway;
 import br.com.refactoringlab.domain.entities.Pedido;

@@ -32,7 +32,7 @@ class PedidoTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = StatusOcorrencia.class, names = {"INSUCESSO_ENDERECO_NAO_ENCONTRADO", "INSUCESSO_AUSENTE", "INSUCESSO_RECUSADO"})
+    @EnumSource(value = StatusOcorrencia.class, names = {"INSUCESSO_ENDERECO_NAO_ENCONTRADO", "INSUCESSO_AUSENTE", "INSUCESSO_RECUSADO_DESTINATARIO"})
     @DisplayName("Deve incrementar a quantidade de tentativas para ocorrências de insucesso")
     void deveIncrementarTentativasParaOcorrenciasDeInsucesso(StatusOcorrencia ocorrenciaInsucesso) {
         // Arrange

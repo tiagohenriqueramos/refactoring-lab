@@ -5,9 +5,12 @@ public enum StatusPedido {
     EM_TRANSITO("Em trânsito"),
     EM_RETORNO("Em processo de retorno"),
     DEVOLVIDO("Devolvido"),
+    DEVOLUCAO_SOLICITADA("Devolução solicitada pelo cliente"),
     CANCELADO("Cancelado"),
     SINISTRO("Sinistrado"),
+    INSUCESSO("Insucesso"),
     ENTREGUE("Entregue");
+
     private final String descricao;
 
     StatusPedido(String descricao) {

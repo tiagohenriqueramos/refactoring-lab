@@ -20,7 +20,7 @@ class StatusOcorrenciaTest {
         assertThat(StatusOcorrencia.DEVOLUCAO.getDescricao()).isEqualTo("Pedido devolvido ao remetente");
         assertThat(StatusOcorrencia.INSUCESSO_ENDERECO_NAO_ENCONTRADO.getDescricao()).isEqualTo("Endereço não encontrado");
         assertThat(StatusOcorrencia.INSUCESSO_AUSENTE.getDescricao()).isEqualTo("Cliente ausente");
-        assertThat(StatusOcorrencia.INSUCESSO_RECUSADO.getDescricao()).isEqualTo("Entrega recusada pelo destinatário");
+        assertThat(StatusOcorrencia.INSUCESSO_RECUSADO_DESTINATARIO.getDescricao()).isEqualTo("Entrega recusada pelo destinatário");
     }
 }
 
