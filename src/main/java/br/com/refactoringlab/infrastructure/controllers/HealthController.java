@@ -13,9 +13,6 @@ public class HealthController {
 
     @GetMapping
     public ResponseEntity<Map<String, String>> checkHealth() {
-        return ResponseEntity.ok(Map.of(
-                "status", "UP",
-                "message", "Aplicação rodando com sucesso no Azure! Por Tiago Ramos"
-        ));
+        return ResponseEntity.ok(Map.of("status", "UP", "message", "Aplicação rodando com sucesso no Azure! Por Tiago Ramos"));
     }
 }

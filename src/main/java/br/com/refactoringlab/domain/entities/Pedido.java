@@ -1,10 +1,15 @@
 package br.com.refactoringlab.domain.entities;
 
+import br.com.refactoringlab.domain.enums.ModalidadeOperacao;
+import br.com.refactoringlab.domain.enums.TipoPedido;
 import br.com.refactoringlab.domain.valueobjects.Endereco;
 import br.com.refactoringlab.domain.enums.StatusOcorrencia;
 import br.com.refactoringlab.domain.enums.StatusPedido;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class Pedido {
@@ -46,6 +51,9 @@ public class Pedido {
     private LocalDateTime dataUltimoStatus;
     private Integer quantidadeTentativasEntrega;
 
+    private TipoPedido tipoPedido;
+    private ModalidadeOperacao modalidadeOperacao;
+
     public Pedido() {
         this.dataCriacao = LocalDateTime.now();
         this.quantidadeTentativasEntrega = 0;
@@ -60,26 +68,45 @@ public class Pedido {
         this.dataUltimoStatus = LocalDateTime.now();
     }
 
-    public void atualizarStatus(StatusPedido novoStatus, StatusOcorrencia ocorrencia) {
-        if (this.statusPedido != null && this.statusPedido.isFinalizado()) {
-            throw new IllegalStateException("O pedido já está finalizado.");
-        }
+    public void atualizarStatus(StatusPedido novoStatus, StatusOcorrencia ocorrencia, String motivo, String usuarioId) {
+        validarSePodeAlterarStatus();
 
         this.statusPedido = novoStatus;
         this.statusUltimaOcorrencia = ocorrencia;
         this.dataUltimoStatus = LocalDateTime.now();
 
-        if (ocorrencia != null && ocorrencia.name().startsWith("INSUCESSO_")) {
+        if (ehOcorrenciaDeInsucesso(ocorrencia)) {
             this.quantidadeTentativasEntrega++;
         }
     }
-    // --- Comportamentos de Negócio ---
 
-    public void registrarTratativaEncerramento(StatusPedido novoStatus, StatusOcorrencia ocorrencia) {
-        this.statusPedido = novoStatus;
-        this.statusUltimaOcorrencia = ocorrencia;
+    public void registrarTratativaEncerramento(StatusPedido novoStatus, StatusOcorrencia ocorrencia, String usuarioId) {
+        atualizarStatus(novoStatus, ocorrencia, null, usuarioId);
+    }
+
+    public void estornarTratativaIndevida(StatusPedido statusAnterior, String motivoEstorno, String usuarioId) {
+        if (this.statusPedido == StatusPedido.CANCELADO) {
+            throw new IllegalStateException("Pedidos cancelados não podem ter status estornados.");
+        }
+
+        if (ehOcorrenciaDeInsucesso(this.statusUltimaOcorrencia) && this.quantidadeTentativasEntrega > 0) {
+            this.quantidadeTentativasEntrega--;
+        }
+
+        this.statusPedido = statusAnterior;
+        this.statusUltimaOcorrencia = StatusOcorrencia.ESTORNO_APONTAMENTO_INCORRETO;
         this.dataUltimoStatus = LocalDateTime.now();
-        this.quantidadeTentativasEntrega++;
+
+    }
+
+    private void validarSePodeAlterarStatus() {
+        if (this.statusPedido != null && this.statusPedido.isFinalizado()) {
+            throw new IllegalStateException("O pedido " + this.id + " já está finalizado.");
+        }
+    }
+
+    private boolean ehOcorrenciaDeInsucesso(StatusOcorrencia ocorrencia) {
+        return ocorrencia != null && ocorrencia.name().startsWith("INSUCESSO_");
     }
 
     // --- Getters e Setters ---
@@ -266,6 +293,22 @@ public class Pedido {
 
     public void setQuantidadeTentativasEntrega(Integer quantidadeTentativasEntrega) {
         this.quantidadeTentativasEntrega = quantidadeTentativasEntrega;
+    }
+
+    public TipoPedido getTipoPedido() {
+        return tipoPedido;
+    }
+
+    public void setTipoPedido(TipoPedido tipoPedido) {
+        this.tipoPedido = tipoPedido;
+    }
+
+    public ModalidadeOperacao getModalidadeOperacao() {
+        return modalidadeOperacao;
+    }
+
+    public void setModalidadeOperacao(ModalidadeOperacao modalidadeOperacao) {
+        this.modalidadeOperacao = modalidadeOperacao;
     }
 
     @Override

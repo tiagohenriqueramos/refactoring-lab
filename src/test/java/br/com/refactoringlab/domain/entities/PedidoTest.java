@@ -22,7 +22,7 @@ class PedidoTest {
         var pedido = new Pedido("123", 1001L, "GUID-123", StatusPedido.RECEBIDO);
 
         // Act
-        pedido.atualizarStatus(StatusPedido.EM_TRANSITO, StatusOcorrencia.EM_TRANSITO);
+        pedido.atualizarStatus(StatusPedido.EM_TRANSITO, StatusOcorrencia.EM_TRANSITO, null, "user-1");
 
         // Assert
         assertThat(pedido.getStatusPedido()).isEqualTo(StatusPedido.EM_TRANSITO);
@@ -32,14 +32,14 @@ class PedidoTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = StatusOcorrencia.class, names = {"INSUCESSO_ENDERECO_NAO_ENCONTRADO", "INSUCESSO_AUSENTE", "INSUCESSO_RECUSADO"})
+    @EnumSource(value = StatusOcorrencia.class, names = {"INSUCESSO_ENDERECO_NAO_ENCONTRADO", "INSUCESSO_DESTINATARIO_AUSENTE", "INSUCESSO_RECUSADO_DESTINATARIO"})
     @DisplayName("Deve incrementar a quantidade de tentativas para ocorrências de insucesso")
     void deveIncrementarTentativasParaOcorrenciasDeInsucesso(StatusOcorrencia ocorrenciaInsucesso) {
         // Arrange
         var pedido = new Pedido("123", 1001L, "GUID-123", StatusPedido.EM_TRANSITO);
 
         // Act
-        pedido.atualizarStatus(StatusPedido.EM_TRANSITO, ocorrenciaInsucesso);
+        pedido.atualizarStatus(StatusPedido.EM_TRANSITO, ocorrenciaInsucesso, null, "user-1");
 
         // Assert
         assertThat(pedido.getQuantidadeTentativasEntrega()).isEqualTo(1);
@@ -52,7 +52,7 @@ class PedidoTest {
         var pedido = new Pedido("123", 1001L, "GUID-123", StatusPedido.EM_TRANSITO);
 
         // Act
-        pedido.atualizarStatus(StatusPedido.ENTREGUE, StatusOcorrencia.ENTREGUE);
+        pedido.atualizarStatus(StatusPedido.ENTREGUE, StatusOcorrencia.ENTREGUE_PROPRIO_DESTINATARIO, null, "user-1");
 
         // Assert
         assertThat(pedido.getQuantidadeTentativasEntrega()).isZero();
@@ -66,9 +66,9 @@ class PedidoTest {
         var pedido = new Pedido("123", 1001L, "GUID-123", statusFinal);
 
         // Act & Assert
-        assertThatThrownBy(() -> pedido.atualizarStatus(StatusPedido.EM_TRANSITO, StatusOcorrencia.RECEBIDO_CD))
+        assertThatThrownBy(() -> pedido.atualizarStatus(StatusPedido.EM_TRANSITO, StatusOcorrencia.RECEBIDO_CD, null, "user-1"))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("O pedido já está finalizado.");
+                .hasMessage("O pedido 123 já está finalizado.");
     }
 
     @Test
@@ -76,7 +76,7 @@ class PedidoTest {
     void deveAtualizarComStatusInicialEOcorrenciaNulos() {
         var pedido = new Pedido();
 
-        pedido.atualizarStatus(StatusPedido.RECEBIDO, null);
+        pedido.atualizarStatus(StatusPedido.RECEBIDO, null, null, "user-1");
 
         assertThat(pedido.getStatusPedido()).isEqualTo(StatusPedido.RECEBIDO);
         assertThat(pedido.getStatusUltimaOcorrencia()).isNull();
@@ -89,10 +89,10 @@ class PedidoTest {
     void deveRegistrarTratativaEncerramento() {
         var pedido = new Pedido("123", 1001L, "GUID-123", StatusPedido.EM_TRANSITO);
 
-        pedido.registrarTratativaEncerramento(StatusPedido.DEVOLVIDO, StatusOcorrencia.DEVOLUCAO);
+        pedido.registrarTratativaEncerramento(StatusPedido.INSUCESSO, StatusOcorrencia.INSUCESSO_DESTINATARIO_AUSENTE, "user-1");
 
-        assertThat(pedido.getStatusPedido()).isEqualTo(StatusPedido.DEVOLVIDO);
-        assertThat(pedido.getStatusUltimaOcorrencia()).isEqualTo(StatusOcorrencia.DEVOLUCAO);
+        assertThat(pedido.getStatusPedido()).isEqualTo(StatusPedido.INSUCESSO);
+        assertThat(pedido.getStatusUltimaOcorrencia()).isEqualTo(StatusOcorrencia.INSUCESSO_DESTINATARIO_AUSENTE);
         assertThat(pedido.getQuantidadeTentativasEntrega()).isEqualTo(1);
         assertThat(pedido.getDataUltimoStatus()).isNotNull();
     }

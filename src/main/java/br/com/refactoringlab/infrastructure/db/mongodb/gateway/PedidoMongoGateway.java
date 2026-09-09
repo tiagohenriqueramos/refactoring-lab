@@ -17,29 +17,24 @@ public class PedidoMongoGateway implements PedidoGateway {
     private final PedidoDocumentMapper mapper;
 
     public PedidoMongoGateway(MongoPedidoSpringRepository mongoRepository, PedidoDocumentMapper mapper) {
-        this.mongoRepository = mongoRepository;
-        this.mapper = mapper;
+        this.mongoRepository = mongoRepository; this.mapper = mapper;
     }
 
     @Override
     public Pedido salvar(Pedido pedido) {
         PedidoDocument document = mapper.toDocument(pedido);
-        PedidoDocument savedDocument = mongoRepository.save(document);
-        return mapper.toDomain(savedDocument);
+        PedidoDocument savedDocument = mongoRepository.save(document); return mapper.toDomain(savedDocument);
     }
 
     @Override
     public Optional<Pedido> buscarPorId(String id) {
-        return mongoRepository.findById(id)
-                .map(mapper::toDomain);
+        return mongoRepository.findById(id).map(mapper::toDomain);
     }
 
     @Override
     public List<Pedido> buscarPorIds(List<String> ids) {
         List<PedidoDocument> documents = mongoRepository.findAllById(ids);
-        return documents.stream()
-                .map(mapper::toDomain)
-                .toList();
+        return documents.stream().map(mapper::toDomain).toList();
     }
 }
 
