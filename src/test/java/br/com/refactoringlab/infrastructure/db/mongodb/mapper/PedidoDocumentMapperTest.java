@@ -168,7 +168,7 @@ class PedidoDocumentMapperTest {
         original.setNumeroNotaFiscal("NF-ROUND");
         original.setChaveNfe("CHAVE-ROUND");
         original.setStatusPedido(StatusPedido.EM_RETORNO);
-        original.setStatusUltimaOcorrencia(StatusOcorrencia.DEVOLUCAO);
+        original.setStatusUltimaOcorrencia(StatusOcorrencia.DEVOLVIDO_CD_ORIGEM);
         original.setNomeDestinatario("Destinatario Round");
         original.setCpfCnpjDestinatario("33333333333");
         original.setEnderecoDestinatario(endereco);
@@ -212,4 +212,3 @@ class PedidoDocumentMapperTest {
         assertThat(convertido.getQuantidadeTentativasEntrega()).isEqualTo(original.getQuantidadeTentativasEntrega());
     }
 }
-

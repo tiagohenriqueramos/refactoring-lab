@@ -22,6 +22,7 @@ public final class EncerramentoRoteiroControllerMapper {
                 .map(item -> new EncerrarPedidoItemInput(
                         item.pedidoEntregaId(),
                         item.novoStatus(),
+                        item.novoStatusOcorrencia(),
                         item.motivoInsucesso()
                 ))
                 .toList();

@@ -8,5 +8,5 @@ import br.com.refactoringlab.application.dto.EncerramentoPedidoOutput;
 public interface EncerramentoPedidoStrategy {
     boolean aceita(StatusOcorrencia status);
     boolean aceita(StatusPedido status);
-    EncerramentoPedidoOutput processar(Pedido pedido, String roteiroId, StatusOcorrencia statusOcorrencia,  String motivoInsucesso, String usuarioId);
+    EncerramentoPedidoOutput processar(Pedido pedido, String roteiroId, StatusOcorrencia statusOcorrencia, String motivoInsucesso, String usuarioId);
 }

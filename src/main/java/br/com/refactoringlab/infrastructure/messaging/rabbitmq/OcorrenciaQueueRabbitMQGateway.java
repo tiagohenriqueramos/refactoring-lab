@@ -16,6 +16,6 @@ public class OcorrenciaQueueRabbitMQGateway implements OcorrenciaQueueGateway {
 
     @Override
     public void publicarOcorrencia(OcorrenciaPedidoEvent event) {
-        rabbitTemplate.convertAndSend("pedidos.exchange", "pedido.ocorrencia.created", event);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_PEDIDOS, RabbitMQConfig.ROUTING_OCORRENCIA, event);
     }
 }
