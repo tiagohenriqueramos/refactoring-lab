@@ -24,14 +24,7 @@ public class OcorrenciaQueueConsumer {
         try {
             logger.info("Consumindo e salvando ocorrência de auditoria para o pedido {}", event.pedidoId());
 
-            OcorrenciaDocument document = new OcorrenciaDocument(
-                    event.pedidoId(),
-                    event.statusPedido(),
-                    event.statusOcorrencia(),
-                    event.motivo(),
-                    event.usuarioId(),
-                    event.dataOcorrencia()
-            );
+            OcorrenciaDocument document = new OcorrenciaDocument(event.pedidoId(), event.statusPedido(), event.statusOcorrencia(), event.motivo(), event.usuarioId(), event.dataOcorrencia());
 
             ocorrenciaRepository.save(document);
             logger.info("Ocorrência salva com sucesso no Mongo para o pedido {}", event.pedidoId());

@@ -16,7 +16,6 @@ public class RastreioQueueRabbitMQGateway implements RastreioQueueGateway {
 
     @Override
     public void publicarRastreio(RastreioPedidoEvent event) {
-        // Envia para a exchange/fila de rastreio unificada
         rabbitTemplate.convertAndSend("pedidos.exchange", "pedido.rastreio.created", event);
     }
 }

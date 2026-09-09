@@ -24,12 +24,9 @@ public class RastreioQueueConsumer {
     public void consumirRastreio(RastreioPedidoEvent event) {
         logger.info("Recebido evento de rastreio para o pedido {}: {}", event.pedidoId(), event.descricao());
 
-        RastreioDocument document = new RastreioDocument();
-        document.setPedidoId(event.pedidoId());
-        document.setStatusPedido(event.statusPedido());
-        document.setStatusOcorrencia(event.statusOcorrencia());
-        document.setDescricao(event.descricao());
-        document.setUsuarioId(event.usuarioId());
+        RastreioDocument document = new RastreioDocument(); document.setPedidoId(event.pedidoId());
+        document.setStatusPedido(event.statusPedido()); document.setStatusOcorrencia(event.statusOcorrencia());
+        document.setDescricao(event.descricao()); document.setUsuarioId(event.usuarioId());
         document.setDataHora(event.dataHora() != null ? event.dataHora() : LocalDateTime.now());
 
         rastreioRepository.save(document);

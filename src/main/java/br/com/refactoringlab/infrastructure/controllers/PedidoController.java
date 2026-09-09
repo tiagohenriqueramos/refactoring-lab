@@ -6,12 +6,7 @@ import br.com.refactoringlab.application.usecases.CriarPedidoUseCase;
 import br.com.refactoringlab.infrastructure.controllers.dto.PedidoResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/pedidos")
@@ -20,10 +15,8 @@ public class PedidoController {
     private final CriarPedidoUseCase criarPedidoUseCase;
     private final BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase;
 
-    public PedidoController(CriarPedidoUseCase criarPedidoUseCase,
-                            BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase) {
-        this.criarPedidoUseCase = criarPedidoUseCase;
-        this.buscarPedidoPorIdUseCase = buscarPedidoPorIdUseCase;
+    public PedidoController(CriarPedidoUseCase criarPedidoUseCase, BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase) {
+        this.criarPedidoUseCase = criarPedidoUseCase; this.buscarPedidoPorIdUseCase = buscarPedidoPorIdUseCase;
     }
 
     @PostMapping
@@ -34,10 +27,7 @@ public class PedidoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PedidoResponse> buscarPorId(@PathVariable String id) {
-        return buscarPedidoPorIdUseCase.executar(id)
-                .map(PedidoResponse::from)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return buscarPedidoPorIdUseCase.executar(id).map(PedidoResponse::from).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 

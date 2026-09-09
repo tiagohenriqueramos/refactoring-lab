@@ -9,6 +9,7 @@ import br.com.refactoringlab.application.gateways.RastreioQueueGateway;
 import br.com.refactoringlab.domain.entities.Pedido;
 import br.com.refactoringlab.domain.enums.StatusOcorrencia;
 import br.com.refactoringlab.domain.enums.StatusPedido;
+
 import java.time.LocalDateTime;
 
 public class EncerramentoInsucessoColetaStrategy implements EncerramentoPedidoStrategy {
@@ -18,8 +19,7 @@ public class EncerramentoInsucessoColetaStrategy implements EncerramentoPedidoSt
     private final RastreioQueueGateway rastreioQueueGateway;
 
     public EncerramentoInsucessoColetaStrategy(PedidoGateway pedidoGateway, OcorrenciaQueueGateway ocorrenciaQueueGateway, RastreioQueueGateway rastreioQueueGateway) {
-        this.pedidoGateway = pedidoGateway;
-        this.ocorrenciaQueueGateway = ocorrenciaQueueGateway;
+        this.pedidoGateway = pedidoGateway; this.ocorrenciaQueueGateway = ocorrenciaQueueGateway;
         this.rastreioQueueGateway = rastreioQueueGateway;
     }
 
@@ -41,25 +41,11 @@ public class EncerramentoInsucessoColetaStrategy implements EncerramentoPedidoSt
 
             pedidoGateway.salvar(pedido);
 
-            OcorrenciaPedidoEvent eventoOcorrencia = new OcorrenciaPedidoEvent(
-                    pedido.getId(),
-                    pedido.getStatusPedido(),
-                    ocorrencia,
-                    motivoInsucesso,
-                    usuarioId,
-                    LocalDateTime.now()
-            );
+            OcorrenciaPedidoEvent eventoOcorrencia = new OcorrenciaPedidoEvent(pedido.getId(), pedido.getStatusPedido(), ocorrencia, motivoInsucesso, usuarioId, LocalDateTime.now());
 
             ocorrenciaQueueGateway.publicarOcorrencia(eventoOcorrencia);
 
-            RastreioPedidoEvent eventoRastreio = new RastreioPedidoEvent(
-                    pedido.getId(),
-                    StatusPedido.INSUCESSO,
-                    ocorrencia,
-                    motivoInsucesso,
-                    usuarioId,
-                    LocalDateTime.now()
-            );
+            RastreioPedidoEvent eventoRastreio = new RastreioPedidoEvent(pedido.getId(), StatusPedido.INSUCESSO, ocorrencia, motivoInsucesso, usuarioId, LocalDateTime.now());
 
             rastreioQueueGateway.publicarRastreio(eventoRastreio);
 

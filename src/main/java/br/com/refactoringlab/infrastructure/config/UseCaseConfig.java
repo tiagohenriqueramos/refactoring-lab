@@ -28,18 +28,12 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public EncerramentoInsucessoColetaStrategy encerramentoInsucessoColetaStrategy(
-            PedidoGateway pedidoGateway,
-            OcorrenciaQueueGateway ocorrenciaQueueGateway,
-            RastreioQueueGateway rastreioQueueGateway
-    ) {
+    public EncerramentoInsucessoColetaStrategy encerramentoInsucessoColetaStrategy(PedidoGateway pedidoGateway, OcorrenciaQueueGateway ocorrenciaQueueGateway, RastreioQueueGateway rastreioQueueGateway) {
         return new EncerramentoInsucessoColetaStrategy(pedidoGateway, ocorrenciaQueueGateway, rastreioQueueGateway);
     }
 
     @Bean
-    public EncerramentoPedidoStrategyFactory encerramentoPedidoStrategyFactory(
-            List<EncerramentoPedidoStrategy> strategies
-    ) {
+    public EncerramentoPedidoStrategyFactory encerramentoPedidoStrategyFactory(List<EncerramentoPedidoStrategy> strategies) {
         return new EncerramentoPedidoStrategyFactory(strategies);
     }
 
