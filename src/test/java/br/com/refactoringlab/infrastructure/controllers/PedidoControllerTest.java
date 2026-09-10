@@ -1,6 +1,7 @@
 package br.com.refactoringlab.infrastructure.controllers;
 
 import br.com.refactoringlab.application.usecases.BuscarPedidoPorIdUseCase;
+import br.com.refactoringlab.application.usecases.BuscarPedidosPorIdsUseCase;
 import br.com.refactoringlab.application.usecases.CriarPedidoUseCase;
 import br.com.refactoringlab.domain.entities.Pedido;
 import br.com.refactoringlab.domain.enums.StatusPedido;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +35,9 @@ class PedidoControllerTest {
 
     @MockitoBean
     private BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase;
+
+    @MockitoBean
+    private BuscarPedidosPorIdsUseCase buscarPedidosPorIdsUseCase;
 
     @Test
     @DisplayName("Deve criar pedido e retornar 201")
@@ -123,6 +128,28 @@ class PedidoControllerTest {
 
         mockMvc.perform(get("/v1/pedidos/PED-404"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve buscar todos os pedidos com sucesso")
+    void deveBuscarTodosOsPedidosComSucesso() throws Exception {
+        var pedido1 = new Pedido();
+        pedido1.setId("PED-100");
+        pedido1.setCodigoInterno(100L);
+
+        var pedido2 = new Pedido();
+        pedido2.setId("PED-200");
+        pedido2.setCodigoInterno(200L);
+
+        when(buscarPedidosPorIdsUseCase.executar()).thenReturn(List.of(pedido1, pedido2));
+
+        mockMvc.perform(get("/v1/pedidos"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].id").value("PED-100"))
+                .andExpect(jsonPath("$[0].codigoInterno").value(100))
+                .andExpect(jsonPath("$[1].id").value("PED-200"))
+                .andExpect(jsonPath("$[1].codigoInterno").value(200));
     }
 }
 

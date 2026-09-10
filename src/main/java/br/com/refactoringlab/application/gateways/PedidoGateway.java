@@ -9,6 +9,7 @@ public interface PedidoGateway {
     Pedido salvar(Pedido pedido);
     Optional<Pedido> buscarPorId(String id);
     List<Pedido> buscarPorIds(List<String> ids);
+    List<Pedido> buscarPorIds();
 }
 
 

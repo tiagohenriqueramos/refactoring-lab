@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,6 +89,32 @@ class PedidoMongoGatewayTest {
         assertThat(resultado).isEmpty();
         verify(mongoRepository).findById(id);
         verifyNoInteractions(mapper);
+    }
+
+    @Test
+    @DisplayName("Deve buscar todos os pedidos usando findAll e mapear para dominio")
+    void deveBuscarTodosOsPedidosUsandoFindAllEMapear() {
+        var doc1 = new PedidoDocument();
+        doc1.setId("PED-1");
+        var doc2 = new PedidoDocument();
+        doc2.setId("PED-2");
+
+        var pedido1 = new Pedido();
+        pedido1.setId("PED-1");
+        var pedido2 = new Pedido();
+        pedido2.setId("PED-2");
+
+        when(mongoRepository.findAll()).thenReturn(List.of(doc1, doc2));
+        when(mapper.toDomain(doc1)).thenReturn(pedido1);
+        when(mapper.toDomain(doc2)).thenReturn(pedido2);
+
+        var resultado = repository.buscarPorIds();
+
+        assertThat(resultado).hasSize(2);
+        assertThat(resultado).containsExactly(pedido1, pedido2);
+        verify(mongoRepository).findAll();
+        verify(mapper).toDomain(doc1);
+        verify(mapper).toDomain(doc2);
     }
 }
 

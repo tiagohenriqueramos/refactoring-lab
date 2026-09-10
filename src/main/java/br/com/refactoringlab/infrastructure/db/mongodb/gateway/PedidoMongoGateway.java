@@ -36,6 +36,12 @@ public class PedidoMongoGateway implements PedidoGateway {
         List<PedidoDocument> documents = mongoRepository.findAllById(ids);
         return documents.stream().map(mapper::toDomain).toList();
     }
+
+    @Override
+    public List<Pedido> buscarPorIds() {
+        List<PedidoDocument> documents = mongoRepository.findAll();
+        return documents.stream().map(mapper::toDomain).toList();
+    }
 }
 
 
