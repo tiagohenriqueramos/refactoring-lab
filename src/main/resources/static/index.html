@@ -4,55 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Encerramento de Roteiro</title>
-    <style>
-        :root {
-            --bg-body: #f3f4f6;
-            --card-bg: #ffffff;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success-bg: #dcfce7;
-            --success-text: #15803d;
-            --danger-bg: #fee2e2;
-            --danger-text: #b91c1c;
-            --text-main: #1f2937;
-            --text-sub: #4b5563;
-            --border: #d1d5db;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); padding: 2rem 1rem; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 850px; display: flex; flex-direction: column; gap: 1.5rem; }
-
-        .card { background: var(--card-bg); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1.25rem; color: #111827; }
-        h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
-
-        .search-box { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
-        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
-        .form-group.full { grid-column: span 2; }
-
-        label { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
-        input, select, textarea { padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; outline: none; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
-        input[readonly] { background-color: #f9fafb; color: #6b7280; }
-
-        .btn { background: var(--primary); color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-secondary { background: #4b5563; }
-        .btn-secondary:hover { background: #374151; }
-
-        .info-panel { background: #eff6ff; border-left: 4px solid var(--primary); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; margin-bottom: 1.25rem; font-size: 0.85rem; }
-        .info-panel p { margin-bottom: 0.25rem; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.875rem; }
-        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background-color: #f9fafb; font-weight: 600; color: var(--text-sub); }
-
-        .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-        .badge-success { background: var(--success-bg); color: var(--success-text); }
-        .badge-danger { background: var(--danger-bg); color: var(--danger-text); }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -74,7 +26,7 @@
 
     <!-- Card de Encerramento -->
     <div class="card">
-        <h1>2. Formuário de Encerramento de Roteiro</h1>
+        <h1>2. Formulário de Encerramento de Roteiro</h1>
         <form id="formEncerramento">
             <div class="grid-form">
                 <div class="form-group">
@@ -129,106 +81,6 @@
     </div>
 </div>
 
-<script>
-    const API_BASE_URL = 'https://finalizador-encerramento-axdhangvgvhxbuha.canadacentral-01.azurewebsites.net';
-
-    // 1. Busca os dados do Pedido no Azure
-    async function buscarPedido() {
-        const id = document.getElementById('inputBuscaId').value.trim();
-        if (!id) return alert('Por favor, informe o ID do pedido.');
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/v1/pedidos/${id}`);
-
-            if (response.status === 404) {
-                alert('Pedido não encontrado no MongoDB!');
-                return;
-            }
-
-            if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
-
-            const pedido = await response.json();
-
-            // Preenche o formulário e o painel informativo
-            document.getElementById('pedidoEntregaId').value = pedido.id;
-            document.getElementById('infoDestinatario').innerText = pedido.nomeDestinatario || 'N/I';
-            document.getElementById('infoStatus').innerText = pedido.statusPedido || 'N/I';
-            document.getElementById('infoOcorrencia').innerText = pedido.statusUltimaOcorrencia || 'N/I';
-
-            document.getElementById('painelDetalhes').style.display = 'block';
-
-        } catch (error) {
-            console.error('Erro na requisição:', error);
-            alert('Falha ao conectar com o serviço no Azure.');
-        }
-    }
-
-    // 2. Submete o encerramento do lote para a API
-    document.getElementById('formEncerramento').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const roteiroId = document.getElementById('roteiroId').value;
-        const usuarioId = document.getElementById('usuarioId').value;
-        const pedidoEntregaId = document.getElementById('pedidoEntregaId').value;
-
-        if (!pedidoEntregaId) {
-            alert('Carregue um pedido válido antes de processar!');
-            return;
-        }
-
-        // Monta o payload no formato esperado por List<EncerrarPedidoRoteiroRequest>[cite: 21]
-        const payload = [{
-            pedidoEntregaId: pedidoEntregaId,
-            novoStatus: document.getElementById('novoStatus').value,
-            novoStatusOcorrencia: document.getElementById('novoStatusOcorrencia').value,
-            motivoInsucesso: document.getElementById('motivoInsucesso').value
-        }];
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/encerramento-roteiro/${roteiroId}?usuarioId=${usuarioId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
-
-            const resultados = await response.json();
-            renderizarResultados(resultados);
-
-        } catch (error) {
-            console.error('Erro ao encerrar:', error);
-            alert('Erro ao enviar a requisição de encerramento.');
-        }
-    });
-
-    // 3. Renderiza o resultado devolvido pelo Use Case
-    function renderizarResultados(resultados) {
-        const tbody = document.getElementById('tabelaResultados');
-        tbody.innerHTML = '';
-
-        resultados.forEach(item => {
-            const tr = document.createElement('tr');
-
-            const badgeClass = item.possuiErro ? 'badge-danger' : 'badge-success';
-            const statusTexto = item.possuiErro ? 'Erro' : 'Sucesso';
-
-            tr.innerHTML = `
-                <td>${item.pedidoId || '-'}</td>
-                <td><span class="badge ${badgeClass}">${statusTexto}</span></td>
-                <td>${item.mensagem || 'Encerrado com sucesso'}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        document.getElementById('cardResultados').style.display = 'block';
-    }
-
-    // Carrega o pedido inicial automaticamente ao abrir
-    window.addEventListener('DOMContentLoaded', () => {
-        buscarPedido();
-    });
-</script>
-
+<script src="js/script.js"></script>
 </body>
 </html>
