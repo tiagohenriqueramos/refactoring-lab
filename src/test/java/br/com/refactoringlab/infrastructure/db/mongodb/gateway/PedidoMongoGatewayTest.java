@@ -116,6 +116,29 @@ class PedidoMongoGatewayTest {
         verify(mapper).toDomain(doc1);
         verify(mapper).toDomain(doc2);
     }
+
+    @Test
+    @DisplayName("Deve buscar pedidos por codigo de roteiro e mapear para dominio")
+    void deveBuscarPorCodigoRoteiroEMapear() {
+        var codigoRoteiro = "ROT-2026-001";
+
+        var doc1 = new PedidoDocument();
+        doc1.setId("PED-1");
+        doc1.setCodigoRoteiro(codigoRoteiro);
+
+        var pedido1 = new Pedido();
+        pedido1.setId("PED-1");
+
+        when(mongoRepository.findByCodigoRoteiro(codigoRoteiro)).thenReturn(List.of(doc1));
+        when(mapper.toDomain(doc1)).thenReturn(pedido1);
+
+        var resultado = repository.buscarPorCodigoRoteiro(codigoRoteiro);
+
+        assertThat(resultado).hasSize(1);
+        assertThat(resultado).containsExactly(pedido1);
+        verify(mongoRepository).findByCodigoRoteiro(codigoRoteiro);
+        verify(mapper).toDomain(doc1);
+    }
 }
 
 

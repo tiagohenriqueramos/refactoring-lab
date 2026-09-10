@@ -3,6 +3,7 @@ package br.com.refactoringlab.infrastructure.controllers;
 import br.com.refactoringlab.application.dto.CriarPedidoInput;
 import br.com.refactoringlab.application.usecases.BuscarPedidoPorIdUseCase;
 import br.com.refactoringlab.application.usecases.BuscarPedidosPorIdsUseCase;
+import br.com.refactoringlab.application.usecases.BuscarPedidosPorRoteiroUseCase;
 import br.com.refactoringlab.application.usecases.CriarPedidoUseCase;
 import br.com.refactoringlab.infrastructure.controllers.dto.PedidoResponse;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,13 @@ public class PedidoController {
     private final CriarPedidoUseCase criarPedidoUseCase;
     private final BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase;
     private final BuscarPedidosPorIdsUseCase buscarPedidosPorIdsUseCase;
+    private final BuscarPedidosPorRoteiroUseCase buscarPedidosPorRoteiroUseCase;
 
-    public PedidoController(CriarPedidoUseCase criarPedidoUseCase, BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase, BuscarPedidosPorIdsUseCase buscarPedidosPorIdsUseCase) {
+    public PedidoController(CriarPedidoUseCase criarPedidoUseCase, BuscarPedidoPorIdUseCase buscarPedidoPorIdUseCase, BuscarPedidosPorIdsUseCase buscarPedidosPorIdsUseCase, BuscarPedidosPorRoteiroUseCase buscarPedidosPorRoteiroUseCase) {
         this.criarPedidoUseCase = criarPedidoUseCase;
         this.buscarPedidoPorIdUseCase = buscarPedidoPorIdUseCase;
         this.buscarPedidosPorIdsUseCase = buscarPedidosPorIdsUseCase;
+        this.buscarPedidosPorRoteiroUseCase = buscarPedidosPorRoteiroUseCase;
     }
 
     @PostMapping
@@ -41,5 +44,13 @@ public class PedidoController {
         return ResponseEntity.ok(buscarPedidosPorIdsUseCase.executar().stream().map(PedidoResponse::from).toList());
     }
 
+    @GetMapping("/roteiro/{codigoRoteiro}")
+    public ResponseEntity<List<PedidoResponse>> buscarPorRoteiro(@PathVariable String codigoRoteiro) {
+        List<PedidoResponse> pedidos = buscarPedidosPorRoteiroUseCase.executar(codigoRoteiro)
+                .stream()
+                .map(PedidoResponse::from)
+                .toList();
+        return ResponseEntity.ok(pedidos);
+    }
 }
 

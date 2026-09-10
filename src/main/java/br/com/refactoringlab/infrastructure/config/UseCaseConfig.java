@@ -6,10 +6,7 @@ import br.com.refactoringlab.application.gateways.PedidoGateway;
 import br.com.refactoringlab.application.gateways.RastreioQueueGateway;
 import br.com.refactoringlab.application.strategy.EncerramentoInsucessoColetaStrategy;
 import br.com.refactoringlab.application.strategy.EncerramentoPedidoStrategy;
-import br.com.refactoringlab.application.usecases.BuscarPedidoPorIdUseCase;
-import br.com.refactoringlab.application.usecases.BuscarPedidosPorIdsUseCase;
-import br.com.refactoringlab.application.usecases.CriarPedidoUseCase;
-import br.com.refactoringlab.application.usecases.EncerrarRoteiroUseCase;
+import br.com.refactoringlab.application.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,6 +28,11 @@ public class UseCaseConfig {
     @Bean
     public BuscarPedidosPorIdsUseCase buscarPedidosPorIdsUseCase(PedidoGateway pedidoGateway) {
         return new BuscarPedidosPorIdsUseCase(pedidoGateway);
+    }
+
+    @Bean
+    public BuscarPedidosPorRoteiroUseCase buscarPedidosPorRoteiroUseCase(PedidoGateway pedidoGateway) {
+        return new BuscarPedidosPorRoteiroUseCase(pedidoGateway);
     }
 
     @Bean

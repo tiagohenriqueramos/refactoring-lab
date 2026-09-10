@@ -42,6 +42,12 @@ public class PedidoMongoGateway implements PedidoGateway {
         List<PedidoDocument> documents = mongoRepository.findAll();
         return documents.stream().map(mapper::toDomain).toList();
     }
+
+    @Override
+    public List<Pedido> buscarPorCodigoRoteiro(String codigoRoteiro) {
+        List<PedidoDocument> documents = mongoRepository.findByCodigoRoteiro(codigoRoteiro);
+        return documents.stream().map(mapper::toDomain).toList();
+    }
 }
 
 

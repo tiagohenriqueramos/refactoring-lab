@@ -10,6 +10,7 @@ public interface PedidoGateway {
     Optional<Pedido> buscarPorId(String id);
     List<Pedido> buscarPorIds(List<String> ids);
     List<Pedido> buscarPorIds();
+    List<Pedido> buscarPorCodigoRoteiro(String codigoRoteiro);
 }
 
 
