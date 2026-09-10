@@ -155,5 +155,21 @@ class PedidoControllerTest {
                 .andExpect(jsonPath("$[1].id").value("PED-200"))
                 .andExpect(jsonPath("$[1].codigoInterno").value(200));
     }
+
+    @Test
+    @DisplayName("Deve buscar pedidos por roteiro com sucesso")
+    void deveBuscarPedidosPorRoteiroComSucesso() throws Exception {
+        var pedido = new Pedido();
+        pedido.setId("PED-300");
+        pedido.setCodigoInterno(300L);
+
+        when(buscarPedidosPorRoteiroUseCase.executar("ROT-ABC")).thenReturn(List.of(pedido));
+
+        mockMvc.perform(get("/v1/pedidos/roteiro/ROT-ABC"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].id").value("PED-300"))
+                .andExpect(jsonPath("$[0].codigoInterno").value(300));
+    }
 }
 
