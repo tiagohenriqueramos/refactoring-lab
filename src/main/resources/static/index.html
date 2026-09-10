@@ -65,6 +65,30 @@
         </form>
     </div>
 
+    <!-- Card de Listagem Geral de Pedidos (Estilo Excel) -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h1 style="margin: 0;">3. Listagem Geral de Pedidos</h1>
+            <button type="button" class="btn btn-secondary" onclick="buscarTodosPedidos()">Buscar Todos os Pedidos</button>
+        </div>
+        <div class="excel-table-container" id="containerTabelaGeral" style="display: none;">
+            <table class="excel-table">
+                <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Destinatário</th>
+                    <th>Status Atual</th>
+                    <th>Ocorrência Atual</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody id="tabelaGeralCorpo">
+                <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Tabela com Retorno da API -->
     <div class="card" id="cardResultados" style="display: none;">
         <h2>Resultado do Processamento</h2>

@@ -95,3 +95,56 @@ function renderizarResultados(resultados) {
 window.addEventListener('DOMContentLoaded', () => {
     buscarPedido();
 });
+
+// 4. Busca todos os pedidos e preenche a tabela em formato Excel
+async function buscarTodosPedidos() {
+    const container = document.getElementById('containerTabelaGeral');
+    const tbody = document.getElementById('tabelaGeralCorpo');
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub);">Carregando pedidos...</td></tr>';
+    container.style.display = 'block';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/v1/pedidos`);
+        if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
+
+        const pedidos = await response.json();
+
+        tbody.innerHTML = '';
+
+        if (!pedidos || pedidos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub);">Nenhum pedido encontrado.</td></tr>';
+            return;
+        }
+
+        pedidos.forEach(pedido => {
+            const tr = document.createElement('tr');
+            
+            const id = pedido.id || '';
+            const destinatario = pedido.nomeDestinatario || '-';
+            const status = pedido.statusPedido || '-';
+            const ocorrencia = pedido.statusUltimaOcorrencia || '-';
+
+            tr.innerHTML = `
+                <td><code>${id}</code></td>
+                <td>${destinatario}</td>
+                <td>${status}</td>
+                <td>${ocorrencia}</td>
+                <td>
+                    <button type="button" class="btn btn-sm" onclick="selecionarPedido('${id}')">Selecionar</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar todos os pedidos:', error);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--danger-text);">Erro ao carregar os pedidos do servidor.</td></tr>';
+    }
+}
+
+// 5. Seleciona um pedido da listagem geral e preenche o formulário de encerramento
+function selecionarPedido(id) {
+    document.getElementById('inputBuscaId').value = id;
+    buscarPedido();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
