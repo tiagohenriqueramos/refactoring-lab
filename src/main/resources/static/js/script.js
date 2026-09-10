@@ -148,3 +148,15 @@ function selecionarPedido(id) {
     buscarPedido();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+async function carregarPedidosDoRoteiro(codigoRoteiro) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/v1/pedidos/roteiro/${codigoRoteiro}`);
+        const pedidos = await response.json();
+
+        console.log(`Carregados ${pedidos.length} pedidos do roteiro ${codigoRoteiro}`);
+        // Aqui você pode preencher uma tabela de pedidos para seleção em lote!
+    } catch (error) {
+        alert('Erro ao carregar os pedidos do roteiro.');
+    }
+}
