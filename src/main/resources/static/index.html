@@ -1,3 +1,27 @@
+<!-- Botões para gerenciamento de roteiros -->
+<div class="card">
+    <h1>2. Gestão de Roteiros</h1>
+    <div style="margin-bottom: 1rem;">
+        <button class="btn" onclick="mostrarCriarRoteiro()">Criar Roteiro</button>
+        <button class="btn btn-secondary" onclick="mostrarBuscarRoteiro()">Buscar por Código</button>
+    </div>
+    <!-- Formulário criar roteiro -->
+    <div id="formCriarRoteiro" style="display: none;">
+        <h3>Criar Novo Roteiro</h3>
+        <form onsubmit="return false;">
+            <input type="text" id="codigoRoteiroNova" placeholder="Código do Roteiro" required>
+            <input type="text" id="motoristaId" placeholder="ID do Motorista" required>
+            <input type="text" id="placaVeiculo" placeholder="Placa do Veículo" required>
+            <button type="button" onclick="criarRoteiro()">Criar</button>
+        </form>
+    </div>
+    <!-- Formulário buscar roteiro -->
+    <div id="formBuscarRoteiro" style="display: none; margin-top: 1rem;">
+        <h3>Buscar Pedidos por Código de Roteiro</h3>
+        <input type="text" id="codigoRoteiroBuscar" placeholder="Código do Roteiro">
+        <button onclick="buscarPedidosPorRoteiro()">Buscar</button>
+    </div>
+</div>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

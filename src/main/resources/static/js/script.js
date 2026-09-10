@@ -1,3 +1,24 @@
+// Método para chamar o endpoint de criar roteiro
+async function criarRoteiroApi(codigoRoteiro, motoristaId, veiculoPlaca, pedidosIds) {
+    const payload = {
+        codigoRoteiro,
+        motoristaId,
+        veiculoPlaca,
+        pedidosIds
+    };
+    const response = await fetch(`${API_BASE_URL}/v1/roteiros`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    return response.json();
+}
+
+// Método para chamar o endpoint de buscar pedidos pelo roteiro
+async function buscarPedidosPorRoteiroApi(codigoRoteiro) {
+    const response = await fetch(`${API_BASE_URL}/v1/pedidos/roteiro/${codigoRoteiro}`);
+    return response.json();
+}
 const API_BASE_URL = 'https://finalizador-encerramento-axdhangvgvhxbuha.canadacentral-01.azurewebsites.net';
 
 // 1. Busca os dados do Pedido no Azure
