@@ -2,6 +2,7 @@ package br.com.refactoringlab.infrastructure.controllers;
 
 import br.com.refactoringlab.application.usecases.BuscarPedidoPorIdUseCase;
 import br.com.refactoringlab.application.usecases.BuscarPedidosPorIdsUseCase;
+import br.com.refactoringlab.application.usecases.BuscarPedidosPorRoteiroUseCase;
 import br.com.refactoringlab.application.usecases.CriarPedidoUseCase;
 import br.com.refactoringlab.domain.entities.Pedido;
 import br.com.refactoringlab.domain.enums.StatusPedido;
@@ -38,6 +39,9 @@ class PedidoControllerTest {
 
     @MockitoBean
     private BuscarPedidosPorIdsUseCase buscarPedidosPorIdsUseCase;
+
+    @MockitoBean
+    private BuscarPedidosPorRoteiroUseCase buscarPedidosPorRoteiroUseCase;
 
     @Test
     @DisplayName("Deve criar pedido e retornar 201")

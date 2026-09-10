@@ -4,6 +4,7 @@ import br.com.refactoringlab.application.factory.EncerramentoPedidoStrategyFacto
 import br.com.refactoringlab.application.gateways.OcorrenciaQueueGateway;
 import br.com.refactoringlab.application.gateways.PedidoGateway;
 import br.com.refactoringlab.application.gateways.RastreioQueueGateway;
+import br.com.refactoringlab.application.gateways.RoteiroGateway;
 import br.com.refactoringlab.application.strategy.EncerramentoInsucessoColetaStrategy;
 import br.com.refactoringlab.application.strategy.EncerramentoPedidoStrategy;
 import br.com.refactoringlab.application.usecases.*;
@@ -33,6 +34,11 @@ public class UseCaseConfig {
     @Bean
     public BuscarPedidosPorRoteiroUseCase buscarPedidosPorRoteiroUseCase(PedidoGateway pedidoGateway) {
         return new BuscarPedidosPorRoteiroUseCase(pedidoGateway);
+    }
+
+    @Bean
+    public CriarRoteiroUseCase criarRoteiroUseCase(RoteiroGateway roteiroGateway) {
+        return new CriarRoteiroUseCase(roteiroGateway);
     }
 
     @Bean
