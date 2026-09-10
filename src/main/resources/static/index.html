@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Encerramento de Roteiro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <!-- Card de Busca de Pedido -->
+    <div class="card">
+        <h1>1. Localizar Pedido no Azure</h1>
+        <div class="search-box">
+            <input type="text" id="inputBuscaId" value="6aa0b4bcb91bc0782da4388a" placeholder="Cole o ID do Pedido (MongoDB)..." style="flex: 1;">
+            <button type="button" class="btn btn-secondary" onclick="buscarPedido()">Carregar Pedido</button>
+        </div>
+
+        <!-- Painel de detalhes do pedido carregado -->
+        <div id="painelDetalhes" class="info-panel" style="display: none;">
+            <p><strong>Destinatário:</strong> <span id="infoDestinatario">-</span></p>
+            <p><strong>Status Atual:</strong> <span id="infoStatus">-</span> | <strong>Ocorrência Atual:</strong> <span id="infoOcorrencia">-</span></p>
+        </div>
+    </div>
+
+    <!-- Card de Encerramento -->
+    <div class="card">
+        <h1>2. Formulário de Encerramento de Roteiro</h1>
+        <form id="formEncerramento">
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="roteiroId">ID do Roteiro</label>
+                    <input type="text" id="roteiroId" value="ROT-2026-001" required>
+                </div>
+                <div class="form-group">
+                    <label for="usuarioId">ID do Usuário</label>
+                    <input type="text" id="usuarioId" value="USR-1020" required>
+                </div>
+                <div class="form-group full">
+                    <label for="pedidoEntregaId">ID do Pedido Selecionado</label>
+                    <input type="text" id="pedidoEntregaId" readonly placeholder="Carregue um pedido acima..." required>
+                </div>
+                <div class="form-group">
+                    <label for="novoStatus">Novo Status do Pedido</label>
+                    <select id="novoStatus">
+                        <option value="INSUCESSO">INSUCESSO</option>
+                        <option value="CANCELADO">CANCELADO</option>
+                        <option value="ENTREGUE">ENTREGUE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="novoStatusOcorrencia">Status da Ocorrência</label>
+                    <select id="novoStatusOcorrencia">
+                        <option value="INSUCESSO_COLETA_REVERSA_AUSENTE">INSUCESSO_COLETA_REVERSA_AUSENTE</option>
+                        <option value="INSUCESSO_COLETA_REVERSA_RECUSADO">INSUCESSO_COLETA_REVERSA_RECUSADO</option>
+                    </select>
+                </div>
+                <div class="form-group full">
+                    <label for="motivoInsucesso">Motivo do Insucesso</label>
+                    <textarea id="motivoInsucesso" rows="2">Cliente ausente no momento da tentativa de coleta</textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn">Processar Encerramento</button>
+        </form>
+    </div>
+
+    <!-- Tabela com Retorno da API -->
+    <div class="card" id="cardResultados" style="display: none;">
+        <h2>Resultado do Processamento</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID Pedido</th>
+                <th>Status</th>
+                <th>Mensagem</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaResultados"></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
