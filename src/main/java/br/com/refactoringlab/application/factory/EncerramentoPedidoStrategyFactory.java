@@ -14,7 +14,10 @@ public class EncerramentoPedidoStrategyFactory {
         this.strategies = strategies;
     }
 
-    public EncerramentoPedidoStrategy obterStrategy(StatusOcorrencia ocorrencia, StatusPedido status) {
-        return strategies.stream().filter(strategy -> (ocorrencia != null && strategy.aceita(ocorrencia)) || (status != null && strategy.aceita(status))).findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("Nenhuma estratégia de encerramento encontrada para a ocorrência '%s' e status '%s'.", ocorrencia, status)));
+    public EncerramentoPedidoStrategy obterStrategy(StatusOcorrencia statusOcorrencia, StatusPedido statusPedido) {
+        return strategies.stream()
+                .filter(s -> s.aceita(statusOcorrencia) || s.aceita(statusPedido))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Nenhuma estratégia de encerramento encontrada para o status: " + statusOcorrencia + " / " + statusPedido));
     }
 }
