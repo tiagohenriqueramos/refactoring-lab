@@ -41,14 +41,9 @@ public class EncerramentoInsucessoColetaStrategy implements EncerramentoPedidoSt
 
             pedidoGateway.salvar(pedido);
 
-            OcorrenciaPedidoEvent eventoOcorrencia = new OcorrenciaPedidoEvent(pedido.getId(), pedido.getStatusPedido(), ocorrencia, motivoInsucesso, usuarioId, LocalDateTime.now());
+            ocorrenciaQueueGateway.publicarOcorrencia(new OcorrenciaPedidoEvent(pedido.getId(), pedido.getStatusPedido(), ocorrencia, motivoInsucesso, usuarioId, LocalDateTime.now()));
 
-            ocorrenciaQueueGateway.publicarOcorrencia(eventoOcorrencia);
-
-            RastreioPedidoEvent eventoRastreio = new RastreioPedidoEvent(pedido.getId(), StatusPedido.INSUCESSO, ocorrencia, motivoInsucesso, usuarioId, LocalDateTime.now());
-
-            rastreioQueueGateway.publicarRastreio(eventoRastreio);
-
+            rastreioQueueGateway.publicarRastreio(new RastreioPedidoEvent(pedido.getId(), StatusPedido.INSUCESSO, ocorrencia, motivoInsucesso, usuarioId, LocalDateTime.now()));
 
             return new EncerramentoPedidoOutput(pedido.getId(), false, "Insucesso de coleta (" + ocorrencia + ") registrado com sucesso.", pedido.getId(), null, null);
 
